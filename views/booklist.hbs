@@ -15,19 +15,29 @@
                 <td>
                     <form method="GET" action="/booklist/{{smallletter}}">
                         <input type="hidden" name="offset" value={{ prevOffset }}>
-                        <button type="submit" >Previous</button>
+                        {{#if prevbool}}
+                            <button type="submit" disabled=true >Previous</button>
+                        {{else}}
+                            <button type="submit">Previous</button>
+                        {{/if}}
                     </form>
                 </td>
                 <td>
                     <form method="GET" action="/booklist/{{smallletter}}">
                         <input type="hidden" name="offset" value={{ nextOffset }}>
-                        <button type="submit" >Next</button>
+                        {{!-- <button type="submit" >Next</button> --}}
+                        {{#if nextbool}}
+                            <button type="submit" disabled=true >Next</button>
+                        {{else}}
+                            <button type="submit" >Next</button>
+                        {{/if}}
+                        
                     </form>
                 </td>
                 
             </tr>
 
 {{!-- 
-disabled={{prevbool}} 
+
 disabled={{nextbool}}
 --}}

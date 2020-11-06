@@ -63,13 +63,16 @@ app.get('/booklist/:firstCharacter', async (req, res) => {
         // console.log('television_shows:', television_shows)
         // console.log('offset: ', offset)
         // console.log('results: ', results)
+        const bl = results[0].length
+        console.log('result length: ', bl)
         res.status(200)
         res.type('text/html')
         res.render('booklist', {
             books: results[0],
             prevOffset: Math.max(0, offset - limit),
-            // prevbool: !offset,
+            prevbool: !offset,
             nextOffset: offset + limit,
+            nextbool: bl < limit,
             letter: Object.values(req.params)[0].toUpperCase(),
             smallletter: Object.values(req.params)[0]
 
