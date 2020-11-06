@@ -95,6 +95,7 @@ app.get('/booklist/details/:title', async (req, res) => {
     console.log('title: ', title)
     const conn = await pool.getConnection()
     titlereview = title
+    console.log('req.get("Accept"): ', req.get("Accept"))
     try {
         const results = await conn.query(SQL_GET_DETAILS_BY_TITLE, [title])
         const recs = results[0]
@@ -117,8 +118,9 @@ app.get('/booklist/details/:title', async (req, res) => {
                 res.json(recs[0])
             },
             'default': () => {
-                res.type('text/plain')
-                res.send(JSON.stringify(recs[0]))
+                resp.status(406)
+                resp.type('text/plain')
+                resp.send(`Not supported: ${req.get("Accept")}`)
             }
         })
     } catch(e) {
@@ -164,10 +166,6 @@ app.get('/reviews',
         })
     }
 )
-
-app.use(express.static(__dirname + '/static'))
-app.use(express.static(__dirname + '/public'))
-
 
 
 

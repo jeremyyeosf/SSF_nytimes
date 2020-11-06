@@ -19,14 +19,16 @@
         <div>
             <a target="_blank" href="{{ this.url }}">Full review</a>
         </div>
-        <div>
-            <p>Copyright (c) 2020 The New York Times Company. All Rights Reserved.</p>
-        </div>
+        
 
     {{/each}}
 {{else}}
     <h1>There are no reviews for this book</h1>
+    <a class="btn btn-primary" href="/" role="button">Home</a>
 {{/if}} 
+<div>
+    <p style="font-size:11px">Copyright (c) 2020 The New York Times Company. All Rights Reserved.</p>
+</div>
 
  {{!-- book_title: 'Happiness',
     book_author: 'Ann Harleman',
@@ -34,3 +36,4 @@
     publication_dt: '1994-02-13',
     summary: '',
     url: 'http://www.nytimes.com/1994/02/13/books/in-short-fiction-165689.html' --}}
+
