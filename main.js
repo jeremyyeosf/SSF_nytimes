@@ -22,6 +22,8 @@ const firstCharacters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", 
 const apiKey = process.env.API_KEY || ""
 const SQL_GET_TITLES_BEGINNING = "select title from book2018 where title like ? order by title asc limit 10 offset ?"
 // select title from book2018 where title like 'a%' order by title asc limit 10 offset 0;
+const SQL_GET_DETAILS_BY_TITLE = "select title, authors, pages, rating, rating_count, genres, image_url, description from book2018 where title = ?"
+// select title, authors, pages, rating, rating_count, genres, image_url, description from book2018 where title = "the outsider";
 
 
 
@@ -34,13 +36,6 @@ app.get('/', (req, res) => {
     res.type('text/html')
     res.render('index', {firstCharacters})
 })
-
-
-// app.get('/booklist', (req, res) => {
-//     res.status(200)
-//     res.type('text/html')
-//     res.render('booklist')
-// })
 
 app.get('/booklist/:firstCharacter', async (req, res) => {
     const conn = await pool.getConnection()
@@ -75,7 +70,6 @@ app.get('/booklist/:firstCharacter', async (req, res) => {
             nextbool: bl < limit,
             letter: Object.values(req.params)[0].toUpperCase(),
             smallletter: Object.values(req.params)[0]
-
         })
     } catch(e) {
         res.status(500)
@@ -84,12 +78,50 @@ app.get('/booklist/:firstCharacter', async (req, res) => {
     } finally {
         conn.release()
     }
-    // render next/previous buttons
-    
 })
 
 
+app.get('/booklist/details/:title', async (req, res) => {
+    console.log('req.params: ', req.params)
+    const title = req.params['title']
+    console.log('title: ', title)
+    const conn = await pool.getConnection()
 
+    try {
+        const results = await conn.query(SQL_GET_DETAILS_BY_TITLE, [title])
+        const recs = results[0]
+        console.log('recs: ', recs )
+        console.log('recs[0]: ', recs[0] )
+        if (recs.length <= 0) {
+            res.status(404)
+            res.type('text/html')
+            res.send(`Not found: ${title}`)
+            return
+        }
+        res.status(200)
+        res.format({
+            'text/html': () => {
+                res.type('text/html')
+                res.render('details', {details: recs[0]})
+            },
+            'application/json': () => {
+                res.type('application/json')
+                res.json(recs[0])
+            },
+            'default': () => {
+                res.type('text/plain')
+                res.send(JSON.stringify(recs[0]))
+            }
+        })
+    } catch(e) {
+        res.status(500)
+        res.type('text/html')
+        res.send(JSON.stringify(e))
+    } finally {
+        conn.release()
+    }
+
+})
 
 
 
