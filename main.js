@@ -27,6 +27,7 @@ const firstCharacters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", 
 const apiKey = process.env.API_KEY || ""
 const SQL_GET_TITLES_BEGINNING = "select title from book2018 where title like ? order by title asc limit 10 offset ?"
 // select title from book2018 where title like 'a%' order by title asc limit 10 offset 0;
+const SQL_GET_TITLES_COUNT = "select count(*) from book2018 where title like ?"
 const SQL_GET_DETAILS_BY_TITLE = "select title, authors, pages, rating, rating_count, genres, image_url, description from book2018 where title = ?"
 // select title, authors, pages, rating, rating_count, genres, image_url, description from book2018 where title = "the outsider";
 
@@ -60,6 +61,10 @@ app.get('/booklist/:firstCharacter', async (req, res) => {
     // (pgNumber - 1) * limit 
     try {
         const results = await conn.query(SQL_GET_TITLES_BEGINNING, [firstCharacter, offset])
+        const totalcount = await conn.query(SQL_GET_TITLES_COUNT, [firstCharacter])
+        console.log('totalcount: ', totalcount)
+        const offsetComparison = totalcount[0][0]['count(*)'];
+        console.log('offsetComparison: ', offsetComparison)
         // console.log('results:', results)
         // const television_shows = results[0].map(v => v.name)
         // console.log('television_shows:', television_shows)
@@ -74,7 +79,8 @@ app.get('/booklist/:firstCharacter', async (req, res) => {
             prevOffset: Math.max(0, offset - limit),
             prevbool: !offset,
             nextOffset: offset + limit,
-            nextbool: bl < limit,
+            nextbool: (offset + 10) >= offsetComparison,
+            //  || bl < limit,
             letter: Object.values(req.params)[0].toUpperCase(),
             smallletter: Object.values(req.params)[0]
         })
