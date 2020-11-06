@@ -1,0 +1,33 @@
+<div class="jumbotron">
+  <h1 class="display-4">Letter {{ letter }}</h1>
+
+</div>
+
+<div class="list-group">
+    {{#each books}}
+        <a href="booklist/{{this.title}}" class="list-group-item list-group-item-action">{{this.title}}</a>
+    {{/each}}
+</div>
+
+
+
+            <tr>
+                <td>
+                    <form method="GET" action="/booklist/{{smallletter}}">
+                        <input type="hidden" name="offset" value={{ prevOffset }}>
+                        <button type="submit" >Previous</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="GET" action="/booklist/{{smallletter}}">
+                        <input type="hidden" name="offset" value={{ nextOffset }}>
+                        <button type="submit" >Next</button>
+                    </form>
+                </td>
+                
+            </tr>
+
+{{!-- 
+disabled={{prevbool}} 
+disabled={{nextbool}}
+--}}
