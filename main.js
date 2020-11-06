@@ -8,15 +8,16 @@ const morgan = require('morgan')
 
 
 const PORT = parseInt(process.argv[2]) || parseInt(process.env.PORT) || 3000
-const API_KEY = process.env.API_KEY || "g0zFlyGKwa4g25vXrGLZQ7HxIoDsMmzG";
+const API_KEY = process.env.API_KEY
+//  || "g0zFlyGKwa4g25vXrGLZQ7HxIoDsMmzG";
 const ENDPOINT = 'https://api.nytimes.com/svc/books/v3/reviews.json'
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT) || 3306, 
     database: process.env.DB_NAME || 'goodreads',
-    user: process.env.DB_USER || 'wilma',
-    password: process.env.DB_PASSWORD || 'wilma',
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     connectionLimit: 4, 
     timezone: '+08:00'
 })
