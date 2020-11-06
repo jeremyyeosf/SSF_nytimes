@@ -5,20 +5,19 @@
             <h1>{{ this.book_title }}</h1>
         </div>
         <div>
-            {{ this.book_author }}
-            
-        </div>       
+            <p>by {{ this.book_author }}</p>
+        </div>
+        <div>
+            <p>Reviewer: {{ this.byline }}</p>
+        </div>
+        <div>
+            <p>Date: {{ this.publication_dt }}</p>
+        </div> 
         <div>
             {{ this.summary }}
         </div>
-
         <div>
-            {{ this.byline}}
-            {{ this.publication_dt }}
-        </div>
-
-        <div>
-            <a href="{{ this.url }}">Full review</a>
+            <a target="_blank" href="{{ this.url }}">Full review</a>
         </div>
         <div>
             <p>Copyright (c) 2020 The New York Times Company. All Rights Reserved.</p>

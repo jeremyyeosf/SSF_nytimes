@@ -4,6 +4,8 @@ const handlebars =require('express-handlebars')
 const fetch = require('node-fetch')
 const withQuery = require('with-query').default
 const mysql = require('mysql2/promise')
+const morgan = require('morgan')
+
 
 const PORT = parseInt(process.argv[2]) || parseInt(process.env.PORT) || 3000
 const API_KEY = process.env.API_KEY || "g0zFlyGKwa4g25vXrGLZQ7HxIoDsMmzG";
@@ -32,6 +34,8 @@ const SQL_GET_DETAILS_BY_TITLE = "select title, authors, pages, rating, rating_c
 const app = express()
 app.engine('hbs', handlebars({defaultLayout: 'default.hbs'}))
 app.set('view engine', 'hbs')
+
+app.use(morgan('combined'))
 
 app.get('/', (req, res) => {
     res.status(200)
