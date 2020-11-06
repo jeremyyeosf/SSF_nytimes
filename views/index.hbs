@@ -6,7 +6,6 @@
     {{#each firstCharacters}}
         <div class="btn-group" role="group">
         <form method="GET" action="/booklist/{{this}}">
-            {{!-- <input type="hidden" name="{{this}}"> --}}
             <button class="btn btn-dark type="submit">{{this}}</button>
         </form>
         </div>
@@ -14,25 +13,3 @@
 </div>
 
 
-
-    {{!-- <div class="list-group">
-       {{#each firstCharacters}}
-            <a href="booklist/{{this}}" class="list-group-item list-group-item-action">{{this}}</a>
-        {{/each}}
-    </div> --}}
-
-
-
-
-
-
-
-{{!-- 
-
-<div>
-    <form method="GET" action="/booklist">
-        <input type="hidden" name="{{alphabet}}" value="{{alphabet}}">
-        <button type="submit">A</button>
-    </form>
-</div>
- --}}

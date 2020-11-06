@@ -25,7 +25,6 @@
     <td>
         <form method="GET" action="/booklist/{{smallletter}}">
             <input type="hidden" name="offset" value={{ nextOffset }}>
-            {{!-- <button type="submit" >Next</button> --}}
             {{#if nextbool}}
                 <button type="submit" disabled=true >Next</button>
             {{else}}
@@ -37,7 +36,3 @@
     
 </tr>
  <a class="btn btn-primary" href="/" role="button">Home</a>
-{{!-- 
-
-disabled={{nextbool}}
---}}

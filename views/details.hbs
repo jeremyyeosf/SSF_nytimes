@@ -1,52 +1,51 @@
 <div class="container">
-  <div class="row">
-    <div class="col-sm">
-      <img src="{{details.image_url}}" class="rounded float-left" alt="No image" width="100%">
+    <div class="row">
+        <div class="col-sm">
+        <img src="{{details.image_url}}" class="rounded float-left" alt="No image" width="100%">
+        </div>
+        <div class="col-sm">
+            <h3>Book Details</h3>
+            <table class="table">
+                <tr>
+                    <th scope="row">Title</th>
+                    
+                    <td>{{details.title}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Author</th>
+                    <td id="authors">{{details.authors}}</td>
+                    <script>                
+                        let str = document.getElementById("authors").innerHTML; 
+                        let res = str.replaceAll("|", ", ");
+                        document.getElementById("authors").innerHTML = res;
+                    </script>
+                </tr>            
+                <tr>
+                    <th scope="row">Ratings</th>
+                    <td>{{details.rating}} ({{details.rating_count}})</td>
+                </tr>
+                <tr>
+                    <th scope="row">Description</th>
+                    <td>{{details.description}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Pages</th>
+                    <td>{{details.pages}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Genres</th>
+                    <td id="genres">{{details.genres}}</td>
+                    <script>                
+                        let str2 = document.getElementById("genres").innerHTML; 
+                        let res2 = str2.replaceAll("|", ", ");
+                        document.getElementById("genres").innerHTML = res2;
+                    </script>
+                </tr>
+            </table>
+        </div>
     </div>
-    <div class="col-sm">
-        <h3>Book Details</h3>
-        <table class="table">
-            <tr>
-                <th scope="row">Title</th>
-                
-                <td>{{details.title}}</td>
-            </tr>
-            <tr>
-                <th scope="row">Author</th>
-                <td id="authors">{{details.authors}}</td>
-                <script>                
-                    let str = document.getElementById("authors").innerHTML; 
-                    let res = str.replaceAll("|", ", ");
-                    document.getElementById("authors").innerHTML = res;
-                </script>
-            </tr>            
-            <tr>
-                <th scope="row">Ratings</th>
-                <td>{{details.rating}} ({{details.rating_count}})</td>
-            </tr>
-            <tr>
-                <th scope="row">Description</th>
-                <td>{{details.description}}</td>
-            </tr>
-            <tr>
-                <th scope="row">Pages</th>
-                <td>{{details.pages}}</td>
-            </tr>
-            <tr>
-                <th scope="row">Genres</th>
-                <td id="genres">{{details.genres}}</td>
-                <script>                
-                    let str2 = document.getElementById("genres").innerHTML; 
-                    let res2 = str2.replaceAll("|", ", ");
-                    document.getElementById("genres").innerHTML = res2;
-                </script>
-            </tr>
-        </table>
-    </div>
-  </div>
     <div class="row">
        <a class="btn btn-primary" href="/" role="button">Home</a>
-{{!-- <a class="btn btn-primary" href="{{details.official_site}}" role="button">Find reviews</a> --}}
         <form method="GET" action="/reviews">
             <div>
                 <button class="btn btn-primary" type="submit">Find reviews</button>

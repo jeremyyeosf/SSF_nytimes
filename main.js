@@ -9,7 +9,7 @@ const morgan = require('morgan')
 
 const PORT = parseInt(process.argv[2]) || parseInt(process.env.PORT) || 3000
 const API_KEY = process.env.API_KEY
-//  || "g0zFlyGKwa4g25vXrGLZQ7HxIoDsMmzG";
+
 const ENDPOINT = 'https://api.nytimes.com/svc/books/v3/reviews.json'
 
 const pool = mysql.createPool({
@@ -23,13 +23,9 @@ const pool = mysql.createPool({
 })
 
 const firstCharacters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-const apiKey = process.env.API_KEY || ""
 const SQL_GET_TITLES_BEGINNING = "select title from book2018 where title like ? order by title asc limit 10 offset ?"
-// select title from book2018 where title like 'a%' order by title asc limit 10 offset 0;
 const SQL_GET_TITLES_COUNT = "select count(*) from book2018 where title like ?"
-const SQL_GET_DETAILS_BY_TITLE = "select title, authors, pages, rating, rating_count, genres, image_url, description from book2018 where title = ?"
-// select title, authors, pages, rating, rating_count, genres, image_url, description from book2018 where title = "the outsider";
+const SQL_GET_DETAILS_BY_TITLE = "select * from book2018 where title = ?"
 
 
 
@@ -47,29 +43,16 @@ app.get('/', (req, res) => {
 
 app.get('/booklist/:firstCharacter', async (req, res) => {
     const conn = await pool.getConnection()
-    // set variables for limit, offset
     const offset = parseInt(req.query['offset']) || 0
-    console.log('req.query: ', req.query)
-    console.log('req.params: ', req.params)
-    console.log('Object.values(req.params)[0]: ', Object.values(req.params)[0])
-    
     const firstCharacter = Object.values(req.params)[0] + "%"
     console.log('firstChar: ', firstCharacter)
     const limit = 10
-    // const pg1 = 0
-    // const pg2 = 10
-    // (pgNumber - 1) * limit 
     try {
         const results = await conn.query(SQL_GET_TITLES_BEGINNING, [firstCharacter, offset])
         const totalcount = await conn.query(SQL_GET_TITLES_COUNT, [firstCharacter])
         console.log('totalcount: ', totalcount)
         const offsetComparison = totalcount[0][0]['count(*)'];
         console.log('offsetComparison: ', offsetComparison)
-        // console.log('results:', results)
-        // const television_shows = results[0].map(v => v.name)
-        // console.log('television_shows:', television_shows)
-        // console.log('offset: ', offset)
-        // console.log('results: ', results)
         const bl = results[0].length
         console.log('result length: ', bl)
         res.status(200)
@@ -80,7 +63,6 @@ app.get('/booklist/:firstCharacter', async (req, res) => {
             prevbool: !offset,
             nextOffset: offset + limit,
             nextbool: (offset + 10) >= offsetComparison,
-            //  || bl < limit,
             letter: Object.values(req.params)[0].toUpperCase(),
             smallletter: Object.values(req.params)[0]
         })
@@ -149,13 +131,11 @@ app.get('/booklist/details/:title', async (req, res) => {
 
 
 app.get('/reviews', 
-    async (req, resp) => {
+    async (req, res) => {
         console.log('titlereview: ', titlereview)
         console.log(req.query)
         console.log(req.params)
         console.log(req.body)
-        // const search = req.query['title']
-        // construct the url with the query parameters
         const url = withQuery(ENDPOINT, {
             "api-key": API_KEY,
             title: titlereview
@@ -170,35 +150,15 @@ app.get('/reviews',
                 }
             )
         console.info('review_details: ', r)
-
-        resp.status(200)
-        resp.type('text/html')
-        resp.render('reviews', {
+        res.status(200)
+        res.type('text/html')
+        res.render('reviews', {
             r,
             hasContent: r.length > 0
-            //hasContent: !!imgs.length
         })
     }
 )
 
-
-
-
-// // start the server
-// app.listen(PORT, () => {
-//     console.log(`Application started on ${PORT} at ${new Date()}.`)
-// })
-
-// // start the server
-// if (API_KEY)
-//     app.listen(PORT, () => {
-//         console.info(`Application started on port ${PORT} at ${new Date()}`)
-//         console.info(`with key ${API_KEY}`)
-//     })
-// else
-//     console.error('API_KEY is not set')
-
-// start the server
 pool.getConnection()
     .then(conn => {
         console.info('Pinging database...')
@@ -208,10 +168,7 @@ pool.getConnection()
     })
     .then(results => {
         const conn = results[0]
-        // release the connection
         conn.release()
-
-        // start the server
         app.listen(PORT, () => {
             console.info(`Application started on port ${PORT} at ${new Date()}`)
         })
