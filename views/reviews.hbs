@@ -1,0 +1,37 @@
+{{#if hasContent}}
+
+    {{#each r}}
+        <div>
+            <h1>{{ this.book_title }}</h1>
+        </div>
+        <div>
+            {{ this.book_author }}
+            
+        </div>       
+        <div>
+            {{ this.summary }}
+        </div>
+
+        <div>
+            {{ this.byline}}
+            {{ this.publication_dt }}
+        </div>
+
+        <div>
+            <a href="{{ this.url }}">Full review</a>
+        </div>
+        <div>
+            <p>Copyright (c) 2020 The New York Times Company. All Rights Reserved.</p>
+        </div>
+
+    {{/each}}
+{{else}}
+    <h1>There are no reviews for this book</h1>
+{{/if}} 
+
+ {{!-- book_title: 'Happiness',
+    book_author: 'Ann Harleman',
+    byline: 'DAVID GALEF',
+    publication_dt: '1994-02-13',
+    summary: '',
+    url: 'http://www.nytimes.com/1994/02/13/books/in-short-fiction-165689.html' --}}

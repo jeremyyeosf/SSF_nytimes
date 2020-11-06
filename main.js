@@ -6,6 +6,8 @@ const withQuery = require('with-query').default
 const mysql = require('mysql2/promise')
 
 const PORT = parseInt(process.argv[2]) || parseInt(process.env.PORT) || 3000
+const API_KEY = process.env.API_KEY || "g0zFlyGKwa4g25vXrGLZQ7HxIoDsMmzG";
+const ENDPOINT = 'https://api.nytimes.com/svc/books/v3/reviews.json'
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
@@ -80,13 +82,14 @@ app.get('/booklist/:firstCharacter', async (req, res) => {
     }
 })
 
+let titlereview = ""
 
 app.get('/booklist/details/:title', async (req, res) => {
     console.log('req.params: ', req.params)
     const title = req.params['title']
     console.log('title: ', title)
     const conn = await pool.getConnection()
-
+    titlereview = title
     try {
         const results = await conn.query(SQL_GET_DETAILS_BY_TITLE, [title])
         const recs = results[0]
@@ -124,6 +127,38 @@ app.get('/booklist/details/:title', async (req, res) => {
 })
 
 
+app.get('/reviews', 
+    async (req, resp) => {
+        console.log('titlereview: ', titlereview)
+        console.log(req.query)
+        console.log(req.params)
+        console.log(req.body)
+        // const search = req.query['title']
+        // construct the url with the query parameters
+        const url = withQuery(ENDPOINT, {
+            "api-key": API_KEY,
+            title: titlereview
+        })
+        console.log('url: ', url)
+        const result = await fetch(url)
+        const reviews = await result.json()
+        console.log('reviews: ', reviews)
+        const r = reviews.results
+            .map( d => {
+                    return { book_title: d.book_title, book_author: d.book_author, byline: d.byline, publication_dt: d.publication_dt, summary: d.summary, url: d.url }
+                }
+            )
+        console.info('review_details: ', r)
+
+        resp.status(200)
+        resp.type('text/html')
+        resp.render('reviews', {
+            r,
+            hasContent: r.length > 0
+            //hasContent: !!imgs.length
+        })
+    }
+)
 
 app.use(express.static(__dirname + '/static'))
 app.use(express.static(__dirname + '/public'))

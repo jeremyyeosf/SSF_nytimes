@@ -46,9 +46,15 @@
   </div>
   <div class="row">
       <a class="btn btn-primary" href="/" role="button">Home</a>
-<a class="btn btn-primary" href="{{details.official_site}}" role="button">Official site</a>
+{{!-- <a class="btn btn-primary" href="{{details.official_site}}" role="button">Find reviews</a> --}}
   </div>
 </div>
+
+<form method="GET" action="/reviews">
+    <div>
+        <button type="submit">Find reviews</button>
+    </div>
+</form>
 
 
 title, authors, pages, rating, rating_count, genres, image_url, description
