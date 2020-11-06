@@ -4,10 +4,12 @@
 
 <div>
     {{#each firstCharacters}}
+        <div class="btn-group" role="group">
         <form method="GET" action="/booklist/{{this}}">
             {{!-- <input type="hidden" name="{{this}}"> --}}
-            <button type="submit">{{this}}</button>
+            <button class="btn btn-dark type="submit">{{this}}</button>
         </form>
+        </div>
     {{/each}}
 </div>
 

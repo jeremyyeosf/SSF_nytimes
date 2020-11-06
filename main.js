@@ -120,8 +120,16 @@ app.get('/booklist/details/:title', async (req, res) => {
                 res.render('details', {details: recs[0]})
             },
             'application/json': () => {
-                res.type('application/json')
-                res.json(recs[0])
+                res.json({
+                    bookId: recs[0].book_id,
+                    title: recs[0].title,
+                    authors: recs[0].authors.split('|'),
+                    summary: recs[0].description,
+                    pages: recs[0].pages,
+                    rating: recs[0].rating,
+                    ratingCount: recs[0].rating_count,
+                    genre: recs[0].genres.split('|')
+                });
             },
             'default': () => {
                 resp.status(406)
