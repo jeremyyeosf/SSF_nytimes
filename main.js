@@ -1,6 +1,6 @@
 // npm i express express-handlebars node-fetch with-query mysql2
 const express = require('express')
-const handlebars =require('express-handlebars')
+const handlebars = require('express-handlebars')
 const fetch = require('node-fetch')
 const withQuery = require('with-query').default
 const mysql = require('mysql2/promise')
